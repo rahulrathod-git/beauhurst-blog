@@ -7,10 +7,15 @@ export default defineEventHandler(() => {
 
   return {
     stats: summarise(rows, 'Total Raised'),
-    top3: ranked.slice(0, 3).map(r => ({
+    companies: ranked.map(r => ({
       rank: r.rank,
       company: r.row.Company,
+      region: r.row.Region,
+      stage: r.row.Stage,
+      employees: r.row.Employees,
       raised: r.value,
+      website: r.row.Website,
+      industries: r.row.Industries,
     })),
   }
 })
