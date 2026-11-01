@@ -18,6 +18,9 @@ useSeoMeta({
 <template>
   <main>
     <h1>Top 100 UK Fintech Companies by Funding Raised</h1>
+    <p>
+      <NuxtLink to="/upload">Upload your own dataset</NuxtLink>
+    </p>
 
     <p v-if="data">
       Across the top 100 companies, {{ money.format(data.stats.total) }} has been raised.
