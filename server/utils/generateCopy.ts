@@ -8,10 +8,10 @@ export interface BlogCopy {
 export interface Facts {
   datasetName: string
   count: number
-  total: number
-  median: number
-  max: number
-  top: { name: string; value: number }[]
+  total: string
+  median: string
+  max: string
+  top: { name: string; value: string }[]
 }
 
 function isBlogCopy(value: unknown): value is BlogCopy {

@@ -61,6 +61,14 @@ useSeoMeta({ title: 'Upload a dataset' })
 
     <p v-if="error" class="error">{{ error }}</p>
 
+    <section v-if="result?.copy">
+      <h2>{{ result.copy.title }}</h2>
+      <p>{{ result.copy.intro }}</p>
+      <ul>
+        <li v-for="line in result.copy.insights" :key="line">{{ line }}</li>
+      </ul>
+    </section>
+
     <section v-if="result">
       <h2>Results</h2>
       <p>

@@ -37,3 +37,11 @@ export function summarise(rows: Row[], valueKey: string) {
     max: values.at(-1) ?? 0,
   }
 }
+
+export function formatGBP(value: number): string {
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: 'GBP',
+    maximumFractionDigits: 0,
+  }).format(value)
+}
