@@ -8,9 +8,9 @@ const money = new Intl.NumberFormat('en-GB', {
 })
 
 useSeoMeta({
-  title: 'Top 100 UK Fintech Companies by Funding Raised',
+  title: '100 UK Fintech Companies by Funding Raised',
   description: 'A ranking of the top 100 UK fintech companies by total funding raised, with headline statistics on the sector.',
-  ogTitle: 'Top 100 UK Fintech Companies by Funding Raised',
+  ogTitle: '100 UK Fintech Companies by Funding Raised',
   ogDescription: 'A ranking of the top 100 UK fintech companies by total funding raised.',
 })
 </script>
