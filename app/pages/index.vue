@@ -1,42 +1,58 @@
 <script setup lang="ts">
-const { data } = await useFetch('/api/companies')
-
-const money = new Intl.NumberFormat('en-GB', {
-  style: 'currency',
-  currency: 'GBP',
-  maximumFractionDigits: 0,
-})
-
 useSeoMeta({
-  title: '100 UK Fintech Companies by Funding Raised',
-  description: 'A ranking of the top 100 UK fintech companies by total funding raised, with headline statistics on the sector.',
-  ogTitle: '100 UK Fintech Companies by Funding Raised',
-  ogDescription: 'A ranking of the top 100 UK fintech companies by total funding raised.',
+  title: 'SEO Blog Generator',
+  description: 'Turn any company dataset into an SEO-ready blog page with a ranking table, statistics and written copy.',
+  ogTitle: 'SEO Blog Generator',
+  ogDescription: 'Turn any company dataset into an SEO-ready blog page with a ranking table, statistics and written copy.',
 })
 </script>
 
 <template>
-  <main v-if="data">
-    <h1>Top 100 UK Fintech Companies by Funding Raised</h1>
+  <main>
+    <header class="hero">
+      <h1>SEO Blog Generator</h1>
+      <p>Upload a company dataset as a CSV, pick the column to rank by, and get a published-style blog page with written copy, statistics and a full ranking table.</p>
+      <NuxtLink to="/upload" class="button">Create your own blog</NuxtLink>
+    </header>
 
-    <p>
-      Across the top 100 companies, {{ money.format(data.stats.total) }} has been raised.
-      The average is {{ money.format(data.stats.average) }} and the median is
-      {{ money.format(data.stats.median) }}. The largest raise belongs to
-      {{ money.format(data.stats.max) }}.
-    </p>
-
-    <p>
-      <NuxtLink to="/upload">Upload your own dataset</NuxtLink>
-    </p>
-
-    <section>
-      <h2>Ranking</h2>
-      <RankingTable :headers="data.headers" :rows="data.table" />
+    <section class="example-link">
+      <h2>Example</h2>
+      <p>See a finished blog built from the UK fintech dataset.</p>
+      <NuxtLink to="/industries/fintech-companies-seed-funding-rankings-mvzeyshf">View the UK fintech blog</NuxtLink>
     </section>
   </main>
 </template>
 
 <style scoped>
-main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; font-family: system-ui, sans-serif; }
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  line-height: 1.6;
+}
+
+.hero h1 {
+  font-size: 2.25rem;
+  margin: 0 0 0.5rem;
+}
+
+.hero p {
+  max-width: 640px;
+  margin: 0 0 1.25rem;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.7rem 1.2rem;
+  background: #111111;
+  color: #ffffff;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.example-link {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #dddddd;
+}
 </style>

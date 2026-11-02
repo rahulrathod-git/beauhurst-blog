@@ -24,9 +24,29 @@ defineProps<{
 </template>
 
 <style scoped>
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-th, td { text-align: left; padding: 0.5rem; border-bottom: 1px solid #ddd; vertical-align: top; }
-th { font-weight: 600; }
-.highlight { background: #f4f7fb; }
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 1px solid #dddddd;
+  vertical-align: top;
+}
+
+th {
+  font-weight: 600;
+}
+
+.highlight {
+  font-weight: 700;
+}
 </style>
