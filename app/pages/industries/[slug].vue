@@ -21,15 +21,17 @@ useSeoMeta({
     </ul>
 
     <section>
-      <h2>Results</h2>
+      <h2>Headline figures</h2>
       <p>
-        Count {{ report.stats.count }}, total {{ report.stats.total }},
+        {{ report.stats.count }} companies, total {{ report.stats.total }},
         average {{ report.stats.average }}, median {{ report.stats.median }},
         max {{ report.stats.max }}.
       </p>
-      <ol>
-        <li v-for="row in report.top" :key="row.rank">{{ row.name }}: {{ row.value }}</li>
-      </ol>
+    </section>
+
+    <section>
+      <h2>Ranking</h2>
+      <RankingTable :headers="report.headers" :rows="report.table" :value-key="report.valueKey" />
     </section>
   </main>
 </template>

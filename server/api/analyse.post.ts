@@ -21,13 +21,21 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: `Column "${body.valueKey}" not found` })
   }
 
-  const nameColumn = pickNameColumn(firstRow, Object.keys(firstRow))
+  const headers = Object.keys(firstRow)
+  const nameColumn = pickNameColumn(firstRow, headers)
   const ranked = rankRows(rows, body.valueKey)
   const stats = summarise(rows, body.valueKey)
+
   const top = ranked.slice(0, 5).map(r => ({
     rank: r.rank,
     name: r.row[nameColumn] ?? '',
     value: r.value,
+  }))
+
+  const table = ranked.map(r => ({
+    rank: r.rank,
+    value: r.value,
+    cells: headers.map(h => r.row[h] ?? ''),
   }))
 
   let copy: { title: string; intro: string; metaDescription: string; insights: string[] } | null = null
@@ -50,8 +58,11 @@ export default defineEventHandler(async (event) => {
     await saveReport({
       slug,
       createdAt: new Date().toISOString(),
+      valueKey: body.valueKey,
+      headers,
       stats,
       top,
+      table,
       copy,
     })
   }
