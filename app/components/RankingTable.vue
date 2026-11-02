@@ -2,7 +2,7 @@
 defineProps<{
   headers: string[]
   rows: { rank: number; value: number; cells: string[] }[]
-  valueKey: string
+  valueKey?: string
 }>()
 </script>
 
@@ -11,14 +11,12 @@ defineProps<{
     <table>
       <thead>
         <tr>
-          <th v-for="h in headers" :key="h" :class="{ highlight: h === valueKey }">{{ h }}</th>
+          <th v-for="h in headers" :key="h" scope="col" :class="{ highlight: h === valueKey }">{{ h }}</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="row in rows" :key="row.rank">
-          <td v-for="(cell, i) in row.cells" :key="i" :class="{ highlight: headers[i] === valueKey }">
-            {{ cell }}
-          </td>
+          <td v-for="(cell, i) in row.cells" :key="i" :class="{ highlight: headers[i] === valueKey }">{{ cell }}</td>
         </tr>
       </tbody>
     </table>

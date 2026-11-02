@@ -44,7 +44,7 @@ Max: ${facts.max}
 Top five: ${JSON.stringify(facts.top)}`
 
   const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), 20000)
+  const timer = setTimeout(() => controller.abort(), 45000)
 
   try {
     const res = await $fetch<any>(

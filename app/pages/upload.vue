@@ -55,7 +55,7 @@ useSeoMeta({ title: 'Upload a dataset' })
         </select>
       </label>
       <button :disabled="loading" @click="generate">
-        {{ loading ? 'Analysing...' : 'Generate' }}
+        {{ loading ? 'Analysing, this can take up to 60 seconds...' : 'Generate' }}
       </button>
     </div>
 
