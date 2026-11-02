@@ -38,7 +38,7 @@ useSeoMeta({ title: 'Upload your dataset' })
 <template>
   <main>
     <h1>Upload your dataset</h1>
-    <p>Choose a CSV file, then generate your blog page.</p>
+    <p>Choose a .csv file, then generate your blog page.</p>
 
     <input type="file" accept=".csv" @change="onFile" />
 
