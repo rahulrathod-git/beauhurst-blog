@@ -8,7 +8,7 @@
 5. The blog is saved and opens at its own URL, with the full ranking table.
 
 ## Live demo
-https://beauhurst-blog-3tagecaar-rahul-rathods-projects-e977c5f7.vercel.app/
+https://beauhurst-blog.vercel.app/
 
 ## Tools
 - Nuxt.js
