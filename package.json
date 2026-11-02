@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@upstash/redis": "^1.41.0",
     "nuxt": "^4.6.3",
     "papaparse": "^5.7.0",
     "vue": "^3.5.44",
