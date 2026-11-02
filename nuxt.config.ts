@@ -5,9 +5,20 @@ export default defineNuxtConfig({
   },
   nitro: {
     storage: {
-      reports: {
-        driver: 'fs',
-        base: './.data/reports',
+      reports: process.env.KV_REST_API_URL
+        ? {
+            driver: 'upstash',
+            url: process.env.KV_REST_API_URL,
+            token: process.env.KV_REST_API_TOKEN,
+          }
+        : {
+            driver: 'fs',
+            base: './.data/reports',
+          },
+    },
+    vercel: {
+      functions: {
+        maxDuration: 60,
       },
     },
   },
