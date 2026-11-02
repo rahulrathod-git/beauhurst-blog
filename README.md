@@ -1,5 +1,15 @@
 # Beauhurst SEO Blog Generator
 
+## How it works
+1. Upload a CSV on the upload page.
+2. The app parses the file
+3. The headline stats are calculated in code.
+4. Gemini writes the title, intro and sections from those figures.
+5. The blog is saved and opens at its own URL, with the full ranking table.
+
+## Live demo
+https://beauhurst-blog-3tagecaar-rahul-rathods-projects-e977c5f7.vercel.app/
+
 ## Tools
 - Nuxt.js
 - Vue.js
