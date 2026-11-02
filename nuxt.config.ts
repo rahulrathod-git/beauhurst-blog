@@ -16,11 +16,6 @@ export default defineNuxtConfig({
             base: './.data/reports',
           },
     },
-    vercel: {
-      functions: {
-        maxDuration: 60,
-      },
-    },
   },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
