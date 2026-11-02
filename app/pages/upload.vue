@@ -2,9 +2,9 @@
 import Papa from 'papaparse'
 
 const csvText = ref('')
+const fileName = ref('')
 const columns = ref<string[]>([])
 const valueKey = ref('')
-const result = ref<any>(null)
 const error = ref('')
 const loading = ref(false)
 
@@ -14,7 +14,7 @@ async function onFile(event: Event) {
   if (!selected) return
 
   error.value = ''
-  result.value = null
+  fileName.value = selected.name
   csvText.value = await selected.text()
 
   const preview = Papa.parse<string[]>(csvText.value, { preview: 1, delimiter: ',' })
@@ -26,24 +26,28 @@ async function generate() {
   error.value = ''
   loading.value = true
   try {
-    result.value = await $fetch('/api/analyse', {
+    const res = await $fetch<{ slug: string }>('/api/analyse', {
       method: 'POST',
-      body: { csv: csvText.value, valueKey: valueKey.value },
+      body: {
+        csv: csvText.value,
+        valueKey: valueKey.value,
+        datasetName: fileName.value.replace(/\.csv$/i, ''),
+      },
     })
+    await navigateTo(`/industries/${res.slug}`)
   } catch (e: any) {
     error.value = e?.data?.statusMessage ?? 'Something went wrong'
-  } finally {
     loading.value = false
   }
 }
 
-useSeoMeta({ title: 'Upload a dataset' })
+useSeoMeta({ title: 'Create a blog' })
 </script>
 
 <template>
   <main>
-    <h1>Upload a dataset</h1>
-    <p>Choose a CSV file, pick the column to rank by, then generate.</p>
+    <h1>Create a blog</h1>
+    <p>Choose a CSV file, pick the column to rank by, then generate your blog page.</p>
 
     <input type="file" accept=".csv" @change="onFile" />
 
@@ -55,42 +59,17 @@ useSeoMeta({ title: 'Upload a dataset' })
         </select>
       </label>
       <button :disabled="loading" @click="generate">
-        {{ loading ? 'Analysing, this can take up to 60 seconds...' : 'Generate' }}
+        {{ loading ? 'Generating...' : 'Generate blog' }}
       </button>
     </div>
 
+    <p v-if="loading">Writing your blog. This can take up to 45 seconds.</p>
     <p v-if="error" class="error">{{ error }}</p>
-
-    <p v-if="result?.slug">
-      <NuxtLink :to="`/industries/${result.slug}`">Open the full report</NuxtLink>
-    </p>
-    
-    <section v-if="result?.copy">
-      <h2>{{ result.copy.title }}</h2>
-      <p>{{ result.copy.intro }}</p>
-      <ul>
-        <li v-for="line in result.copy.insights" :key="line">{{ line }}</li>
-      </ul>
-    </section>
-
-    <section v-if="result">
-      <h2>Results</h2>
-      <p>
-        Count {{ result.stats.count }}, total {{ result.stats.total }},
-        average {{ result.stats.average }}, median {{ result.stats.median }},
-        max {{ result.stats.max }}.
-      </p>
-      <ol>
-        <li v-for="row in result.top" :key="row.rank">
-          {{ row.name }}: {{ row.value }}
-        </li>
-      </ol>
-    </section>
   </main>
 </template>
 
 <style scoped>
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; font-family: system-ui, sans-serif; }
-.controls { display: flex; gap: 1rem; align-items: center; margin: 1rem 0; }
+.controls { display: flex; gap: 1rem; align-items: center; margin: 1rem 0; flex-wrap: wrap; }
 .error { color: #b00020; }
 </style>

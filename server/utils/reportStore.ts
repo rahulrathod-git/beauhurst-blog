@@ -1,3 +1,5 @@
+import type { BlogCopy } from './generateCopy'
+
 export interface TableRow {
   rank: number
   value: number
@@ -7,12 +9,12 @@ export interface TableRow {
 export interface StoredReport {
   slug: string
   createdAt: string
+  datasetName: string
   valueKey: string
   headers: string[]
   stats: { count: number; total: number; average: number; median: number; max: number }
-  top: { rank: number; name: string; value: number }[]
   table: TableRow[]
-  copy: { title: string; intro: string; metaDescription: string; insights: string[] }
+  copy: BlogCopy
 }
 
 export function makeSlug(title: string): string {

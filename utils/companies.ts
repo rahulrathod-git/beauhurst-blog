@@ -45,3 +45,12 @@ export function formatGBP(value: number): string {
     maximumFractionDigits: 0,
   }).format(value)
 }
+
+export function isMoneyColumn(key: string): boolean {
+  return /raised|revenue|price|funding|cost|sales|income|value|£|\$/i.test(key)
+}
+
+export function formatValue(value: number, key: string): string {
+  if (isMoneyColumn(key)) return formatGBP(value)
+  return value.toLocaleString('en-GB', { maximumFractionDigits: 0 })
+}

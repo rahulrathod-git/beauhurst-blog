@@ -1,6 +1,6 @@
 import { parseCsv } from '../../utils/loadCompanies'
-import { rankRows, summarise, formatGBP } from '../../utils/companies'
-import { generateCopy } from '../utils/generateCopy'
+import { rankRows, summarise, formatValue } from '../../utils/companies'
+import { generateCopy, buildFallbackCopy, type BlogCopy } from '../utils/generateCopy'
 import { makeSlug, saveReport } from '../utils/reportStore'
 
 export default defineEventHandler(async (event) => {
@@ -21,15 +21,16 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: `Column "${body.valueKey}" not found` })
   }
 
+  const datasetName = body.datasetName?.replace(/[_-]+/g, ' ').trim() || 'Uploaded dataset'
+  const valueKey = body.valueKey
   const headers = Object.keys(firstRow)
   const nameColumn = pickNameColumn(firstRow, headers)
-  const ranked = rankRows(rows, body.valueKey)
-  const stats = summarise(rows, body.valueKey)
+  const ranked = rankRows(rows, valueKey)
+  const stats = summarise(rows, valueKey)
 
   const top = ranked.slice(0, 5).map(r => ({
-    rank: r.rank,
     name: r.row[nameColumn] ?? '',
-    value: r.value,
+    value: formatValue(r.value, valueKey),
   }))
 
   const table = ranked.map(r => ({
@@ -38,36 +39,38 @@ export default defineEventHandler(async (event) => {
     cells: headers.map(h => r.row[h] ?? ''),
   }))
 
-  let copy: { title: string; intro: string; metaDescription: string; insights: string[] } | null = null
+  const facts = {
+    datasetName,
+    valueKey,
+    count: stats.count,
+    total: formatValue(stats.total, valueKey),
+    median: formatValue(stats.median, valueKey),
+    max: formatValue(stats.max, valueKey),
+    top,
+  }
+
+  let copy: BlogCopy
   try {
-    copy = await generateCopy(event, {
-      datasetName: body.datasetName ?? 'Uploaded dataset',
-      count: stats.count,
-      total: formatGBP(stats.total),
-      median: formatGBP(stats.median),
-      max: formatGBP(stats.max),
-      top: top.map(t => ({ name: t.name, value: formatGBP(t.value) })),
-    })
+    copy = await generateCopy(event, facts)
   } catch (err) {
     console.error('Gemini call failed', err)
+    copy = buildFallbackCopy(facts, valueKey)
   }
 
-  let slug: string | null = null
-  if (copy) {
-    slug = makeSlug(copy.title)
-    await saveReport({
-      slug,
-      createdAt: new Date().toISOString(),
-      valueKey: body.valueKey,
-      headers,
-      stats,
-      top,
-      table,
-      copy,
-    })
-  }
+  const slug = makeSlug(copy.title)
 
-  return { slug, stats, top, copy }
+  await saveReport({
+    slug,
+    createdAt: new Date().toISOString(),
+    datasetName,
+    valueKey,
+    headers,
+    stats,
+    table,
+    copy,
+  })
+
+  return { slug }
 })
 
 function pickNameColumn(firstRow: Record<string, string>, headers: string[]): string {
