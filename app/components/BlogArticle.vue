@@ -8,13 +8,32 @@ const props = withDefaults(defineProps<{
   highlightBasis: true,
 })
 
-const published = computed(() =>
-  new Date(props.report.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
-)
+const url = useRequestURL()
+const canonical = `${url.origin}${url.pathname}`
 
 const method = computed(() =>
-  `This ranking uses the ${props.report.datasetName} dataset, supplied as a CSV file. The ${props.report.stats.count} entries are sorted by ${props.report.valueKey}, highest first. The figures in this article were calculated directly from that file on ${published.value}, and the written commentary was generated from them.`,
+  `This ranking uses the ${props.report.datasetName} dataset, supplied as a CSV file. The ${props.report.stats.count} entries are sorted by ${props.report.valueKey}, highest first. The figures in this article were calculated directly from that file, and the written commentary was generated from them.`,
 )
+
+const caption = computed(() =>
+  `Full ranking of ${props.report.stats.count} entries, sorted by ${props.report.valueKey}, highest first.`,
+)
+
+const schema = computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: props.report.copy.title,
+  description: props.report.copy.metaDescription,
+  about: props.report.datasetName,
+  mainEntityOfPage: canonical,
+  author: { '@type': 'Organization', name: 'SEO Blog Generator' },
+  publisher: { '@type': 'Organization', name: 'SEO Blog Generator' },
+}))
+
+useHead({
+  link: [{ rel: 'canonical', href: canonical }],
+  script: [{ type: 'application/ld+json', innerHTML: JSON.stringify(schema.value) }],
+})
 
 function paragraphs(text: string) {
   return text.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean)
@@ -26,7 +45,6 @@ function paragraphs(text: string) {
     <header>
       <h1>{{ report.copy.title }}</h1>
       <p class="description">{{ report.copy.metaDescription }}</p>
-      <p class="meta">Published {{ published }} · Source: {{ report.datasetName }}</p>
     </header>
 
     <section class="intro">
@@ -49,6 +67,7 @@ function paragraphs(text: string) {
         :headers="report.headers"
         :rows="report.table"
         :value-key="highlightBasis ? report.valueKey : undefined"
+        :caption="caption"
       />
     </section>
   </article>
@@ -74,10 +93,5 @@ h2 {
 .description {
   font-size: 1.1rem;
   margin: 0 0 0.75rem;
-}
-
-.meta {
-  font-size: 0.9rem;
-  margin: 0 0 1rem;
 }
 </style>

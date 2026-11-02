@@ -1,9 +1,16 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-   runtimeConfig: {
+  runtimeConfig: {
     geminiApiKey: '',
     geminiModel: 'gemini-flash-lite-latest',
   },
+  nitro: {
+    storage: {
+      reports: {
+        driver: 'fs',
+        base: './.data/reports',
+      },
+    },
+  },
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true }
+  devtools: { enabled: true },
 })

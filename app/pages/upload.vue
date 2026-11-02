@@ -41,13 +41,13 @@ async function generate() {
   }
 }
 
-useSeoMeta({ title: 'Create a blog' })
+useSeoMeta({ title: 'Upload your dataset' })
 </script>
 
 <template>
   <main>
-    <h1>Create a blog</h1>
-    <p>Choose a CSV file, pick the column to rank by, then generate your blog page.</p>
+    <h1>Upload your dataset</h1>
+    <p>Choose a .csv file, pick the column to rank by, then generate your blog page.</p>
 
     <input type="file" accept=".csv" @change="onFile" />
 

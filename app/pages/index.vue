@@ -11,14 +11,14 @@ useSeoMeta({
   <main>
     <header class="hero">
       <h1>SEO Blog Generator</h1>
-      <p>Upload a company dataset as a CSV, pick the column to rank by, and get a published-style blog page with written copy, statistics and a full ranking table.</p>
+      <p>Upload a company dataset as a .csv file, pick the column to rank by, and get a blog page with key statistics, insights and a full ranking table.</p>
       <NuxtLink to="/upload" class="button">Create your own blog</NuxtLink>
     </header>
 
     <section class="example-link">
       <h2>Example</h2>
       <p>See a finished blog built from the UK fintech dataset.</p>
-      <NuxtLink to="/industries/fintech-companies-seed-funding-rankings-mvzeyshf">View the UK fintech blog</NuxtLink>
+      <NuxtLink to="/industries/fintech-companies-seed-funding-rankings-mvzfn1nx">View the UK fintech blog</NuxtLink>
     </section>
   </main>
 </template>

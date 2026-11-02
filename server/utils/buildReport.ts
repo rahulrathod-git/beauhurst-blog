@@ -40,6 +40,11 @@ export async function buildReport(event: any, csv: string, valueKey: string, dat
   const ranked = rankRows(rows, valueKey)
   const stats = summarise(rows, valueKey)
 
+  const topFiveTotal = ranked.slice(0, 5).reduce((sum, r) => sum + r.value, 0)
+  const topShare = stats.total > 0
+    ? `${((topFiveTotal / stats.total) * 100).toFixed(1)}%`
+    : 'not available'
+
   const top = ranked.slice(0, 5).map(r => ({
     name: r.row[nameColumn] ?? '',
     value: formatValue(r.value, valueKey),
@@ -58,6 +63,7 @@ export async function buildReport(event: any, csv: string, valueKey: string, dat
     total: formatValue(stats.total, valueKey),
     median: formatValue(stats.median, valueKey),
     max: formatValue(stats.max, valueKey),
+    topShare,
     top,
   }
 
