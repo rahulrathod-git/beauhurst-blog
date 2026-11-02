@@ -1,22 +1,13 @@
 <script setup lang="ts">
 import type { StoredReport } from '../../server/utils/reportStore'
 
-const props = withDefaults(defineProps<{
-  report: StoredReport
-  highlightBasis?: boolean
-}>(), {
-  highlightBasis: true,
-})
+const props = defineProps<{ report: StoredReport }>()
 
 const url = useRequestURL()
 const canonical = `${url.origin}${url.pathname}`
 
-const method = computed(() =>
-  `This ranking uses the ${props.report.datasetName} dataset, supplied as a CSV file. The ${props.report.stats.count} entries are sorted by ${props.report.valueKey}, highest first. The figures in this article were calculated directly from that file, and the written commentary was generated from them.`,
-)
-
 const caption = computed(() =>
-  `Full ranking of ${props.report.stats.count} entries, sorted by ${props.report.valueKey}, highest first.`,
+  `Full table of ${props.report.stats.count} entries, in the order of the source file.`,
 )
 
 const schema = computed(() => ({
@@ -57,18 +48,8 @@ function paragraphs(text: string) {
     </section>
 
     <section>
-      <h2>How this ranking was built</h2>
-      <p>{{ method }}</p>
-    </section>
-
-    <section>
-      <h2>Full ranking</h2>
-      <RankingTable
-        :headers="report.headers"
-        :rows="report.table"
-        :value-key="highlightBasis ? report.valueKey : undefined"
-        :caption="caption"
-      />
+      <h2>Full table</h2>
+      <RankingTable :headers="report.headers" :rows="report.table" :caption="caption" />
     </section>
   </article>
 </template>
