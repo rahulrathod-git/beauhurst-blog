@@ -1,75 +1,36 @@
-# Nuxt Minimal Starter
+# Beauhurst SEO Blog Generator
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Tools
+- Nuxt.js
+- Vue.js
+- TypeScript
+- Papa Parse
+- Google Gemini API
+- Upstash Redis
+- Vercel
 
 ## Setup
-
-Make sure to install dependencies:
+Requires Node.js 22.21 or newer.
 
 ```bash
-# npm
+npm install
+```
+
+Get your own Gemini API key from [Google AI Studio](https://aistudio.google.com), then create a `.env` file in the project root:
+
+NUXT_GEMINI_API_KEY=your-own-key-here
+
+Replace `your-own-key-here` with your key.
+
+Then run:
+
+```bash
 npm install
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+## Limitations
+- The app works best on Industry and company style datasets. 
+- Gemini's free tier has rate limits, so generation can take up to 45 seconds.
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
