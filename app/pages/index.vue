@@ -11,7 +11,7 @@ useSeoMeta({
   <main>
     <header class="hero">
       <h1>SEO Blog Generator</h1>
-      <p>Upload a company dataset as a .csv file, and get a blog page with key statistics, insightsand a full ranking table.</p>
+      <p>Upload a company dataset as a .csv file, and get a blog page with key statistics, insights and a full ranking table.</p>
       <NuxtLink to="/upload" class="button">Create your own blog</NuxtLink>
     </header>
 
