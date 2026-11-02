@@ -1,6 +1,7 @@
 import { parseCsv } from '../../utils/loadCompanies'
 import { rankRows, summarise, formatGBP } from '../../utils/companies'
 import { generateCopy } from '../utils/generateCopy'
+import { makeSlug, saveReport } from '../utils/reportStore'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{ csv?: string; valueKey?: string; datasetName?: string }>(event)
@@ -29,7 +30,7 @@ export default defineEventHandler(async (event) => {
     value: r.value,
   }))
 
-  let copy: Awaited<ReturnType<typeof generateCopy>> | null = null
+  let copy: { title: string; intro: string; metaDescription: string; insights: string[] } | null = null
   try {
     copy = await generateCopy(event, {
       datasetName: body.datasetName ?? 'Uploaded dataset',
@@ -43,7 +44,19 @@ export default defineEventHandler(async (event) => {
     console.error('Gemini call failed', err)
   }
 
-  return { stats, top, copy }
+  let slug: string | null = null
+  if (copy) {
+    slug = makeSlug(copy.title)
+    await saveReport({
+      slug,
+      createdAt: new Date().toISOString(),
+      stats,
+      top,
+      copy,
+    })
+  }
+
+  return { slug, stats, top, copy }
 })
 
 function pickNameColumn(firstRow: Record<string, string>, headers: string[]): string {

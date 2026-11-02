@@ -43,24 +43,32 @@ Median: ${facts.median}
 Max: ${facts.max}
 Top five: ${JSON.stringify(facts.top)}`
 
-  const res = await $fetch<any>(
-    `https://generativelanguage.googleapis.com/v1beta/models/${config.geminiModel}:generateContent`,
-    {
-      method: 'POST',
-      headers: { 'x-goog-api-key': config.geminiApiKey },
-      body: {
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: 'application/json' },
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), 20000)
+
+  try {
+    const res = await $fetch<any>(
+      `https://generativelanguage.googleapis.com/v1beta/models/${config.geminiModel}:generateContent`,
+      {
+        method: 'POST',
+        headers: { 'x-goog-api-key': config.geminiApiKey },
+        signal: controller.signal,
+        body: {
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: 'application/json' },
+        },
       },
-    },
-  )
+    )
 
-  const text = res?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
-  const parsed = JSON.parse(text)
+    const text = res?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
+    const parsed = JSON.parse(text)
 
-  if (!isBlogCopy(parsed)) {
-    throw new Error('Gemini returned JSON in an unexpected shape')
+    if (!isBlogCopy(parsed)) {
+      throw new Error('Gemini returned JSON in an unexpected shape')
+    }
+
+    return parsed
+  } finally {
+    clearTimeout(timer)
   }
-
-  return parsed
 }

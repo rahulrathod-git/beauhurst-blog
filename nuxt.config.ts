@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
    runtimeConfig: {
     geminiApiKey: '',
-    geminiModel: 'gemini-3.8-flash',
+    geminiModel: 'gemini-flash-lite-latest',
   },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true }

@@ -61,6 +61,10 @@ useSeoMeta({ title: 'Upload a dataset' })
 
     <p v-if="error" class="error">{{ error }}</p>
 
+    <p v-if="result?.slug">
+      <NuxtLink :to="`/industries/${result.slug}`">Open the full report</NuxtLink>
+    </p>
+    
     <section v-if="result?.copy">
       <h2>{{ result.copy.title }}</h2>
       <p>{{ result.copy.intro }}</p>
